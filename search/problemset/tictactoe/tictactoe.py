@@ -55,8 +55,14 @@ def result(board, action) -> List[List]:
     Returns the board that results from making move (i, j) on the board.
     """
     i, j = action
-    if board[i][j]:
-        raise Exception("Invalid action")
+
+    try:
+        if board[i][j]:
+            raise Exception("Invalid action")
+        
+    # Cannot take credit for this, included as a result of check50
+    except IndexError:
+        raise Exception("Out of bounds.")
     
     new_board = copy.deepcopy(board)
     new_board[i][j] = player(board)
