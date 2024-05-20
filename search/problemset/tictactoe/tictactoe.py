@@ -56,14 +56,13 @@ def result(board, action) -> List[List]:
     """
     i, j = action
 
-    try:
-        if board[i][j]:
-            raise Exception("Invalid action")
-        
     # Cannot take credit for this, included as a result of check50
-    except IndexError:
+    if i < 0 or j < 0:
         raise Exception("Out of bounds.")
-    
+
+    if board[i][j]:
+        raise Exception("Invalid action")
+
     new_board = copy.deepcopy(board)
     new_board[i][j] = player(board)
 
@@ -136,7 +135,7 @@ def minimax(board) -> Union[Tuple, None]:
 
     # Wrap minimax algo to support tuple(score, action) for ease of execution. 
     # Alpha-Beta Pruning supported via alpha and beta arguments.
-    def minimax_inner(board, player, alpha=None, beta=None):
+    def minimax_inner(board, player, alpha, beta):
         if terminal(board):
             return utility(board), None
 
@@ -156,7 +155,7 @@ def minimax(board) -> Union[Tuple, None]:
                 
                 if beta <= alpha:
                     break
-
+        
         return v, va
 
     _, move = minimax_inner(board, player(board), -11, 11)
